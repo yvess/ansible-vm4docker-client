@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Yves Serrano
+  description: create osx docker setup
+  company: taywa
+  license: BSD
+  min_ansible_version: 1.2
+  platforms:
+  - name: GenericUNIX
+   versions:
+   - all
+  categories:
+  - development
+  - system
+dependencies: []

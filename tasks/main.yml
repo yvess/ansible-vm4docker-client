@@ -1,0 +1,25 @@
+---
+# file: roles/docker-client/tasks/main.yml
+
+- name: install brew packages for docker
+  homebrew: name={{item}} state=present
+  with_items:
+  - docker
+  - openssl
+  - bash
+
+# add env vars for docker
+- lineinfile: dest={{ ansible_env.HOME }}/.profile line='export DOCKER_TLS_VERIFY=1'
+- lineinfile: regexp="^export DOCKER_CERT_PATH=" dest={{ ansible_env.HOME }}/.profile line='export DOCKER_CERT_PATH={{ ansible_env.HOME }}/.vm4docker'
+- lineinfile: regexp="^export DOCKER_HOST=" dest={{ ansible_env.HOME }}/.profile line='export DOCKER_HOST=tcp://{{ docker_hostip }}:2376'
+- lineinfile: regexp="^export DOCKER_HOSTIP=" dest={{ ansible_env.HOME }}/.profile line='export DOCKER_HOSTIP="{{ docker_hostip }}"'
+- lineinfile: regexp="^export DOCKER_GATEWAYIP=" dest={{ ansible_env.HOME }}/.profile line='export DOCKER_GATEWAYIP="{{ docker_gatewayip }}"'
+
+- name: create certs
+  script: ./create_certs.sh creates="{{ ansible_env.HOME }}/.vm4docker"
+
+- name: make dhcp address persistent
+  lineinfile:
+    regexp="^host docker {" dest="/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf"
+    line='host docker { hardware ethernet {{ docker_mac }}; fixed-address {{ docker_hostip }};}'
+  notify: restart vmware services
