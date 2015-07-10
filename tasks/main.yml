@@ -37,7 +37,7 @@
 
 - name: add /Users to /etc/export 
   lineinfile:
-    regexp="^/Users {" dest="/etc/exports"
+    regexp="^/Users" dest="/etc/exports"
     line='/Users -alldirs -mapall={{ ansible_user_uid }}:{{ ansible_user_gid }} {{ docker_hostip }}'
   notify: restart nfsd
   sudo: yes
