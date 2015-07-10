@@ -6,7 +6,11 @@
   with_items:
   - docker
   - openssl
-  - bash
+
+- name: create .profile if it doesn't exists
+  command: "touch {{ ansible_env.HOME }}/.profile"
+  args:
+    creates: "{{ ansible_env.HOME }}/.profile"
 
 # add env vars for docker
 - lineinfile: dest={{ ansible_env.HOME }}/.profile line='export DOCKER_TLS_VERIFY=1'
