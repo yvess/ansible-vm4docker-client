@@ -1,3 +1,6 @@
 - name: restart vmware services
-  shell: 'sudo /Applications/VMware\ Fusion.app/Contents/Library/services/services.sh --stop && sleep 2 && sudo /Applications/VMware Fusion.app/Contents/Library/services/services.sh --start'
+  shell: 'sudo /Applications/VMware\ Fusion.app/Contents/Library/services/services.sh --stop; sleep 3; sudo /Applications/VMware\ Fusion.app/Contents/Library/services/services.sh --start'
   ignore_errors: yes
+
+- name: restart nfsd
+  shell: 'sudo nfsd restart'

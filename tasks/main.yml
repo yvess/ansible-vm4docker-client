@@ -27,3 +27,17 @@
     regexp="^host docker {" dest="/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf"
     line='host docker { hardware ethernet {{ docker_mac }}; fixed-address {{ docker_hostip }};}'
   notify: restart vmware services
+  sudo: yes
+
+- name: create /etc/exports if it doesn't exists
+  command: "touch /etc/exports"
+  sudo: yes
+  args:
+    creates: "/etc/exports"
+
+- name: add /Users to /etc/export 
+  lineinfile:
+    regexp="^/Users {" dest="/etc/exports"
+    line='/Users -alldirs -mapall={{ ansible_user_uid }}:{{ ansible_user_gid }} {{ docker_hostip }}'
+  notify: restart nfsd
+  sudo: yes
