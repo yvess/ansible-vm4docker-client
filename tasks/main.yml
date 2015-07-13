@@ -7,6 +7,13 @@
   - docker
   - openssl
 
+- name: install docker-compose
+  shell: >
+    curl -L https://github.com/docker/compose/releases/download/1.3.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose &&
+    chmod +x /usr/local/bin/docker-compose
+  args:
+    creates: /usr/local/bin/docker-compose
+
 - name: create .profile if it doesn't exists
   command: "touch {{ ansible_env.HOME }}/.profile"
   args:
