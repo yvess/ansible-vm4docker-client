@@ -1,7 +1,7 @@
 #!/bin/sh
 
-mkdir ~/.vm4docker
-cd ~/.vm4docker
+mkdir -p ~/.vm4docker/certs
+cd ~/.vm4docker/certs
 source ~/.profile
 /usr/local/opt/openssl/bin/openssl genrsa -aes256 -passout pass:vm4docker -out ca-key.pem 2048
 /usr/local/opt/openssl/bin/openssl req -new -x509 -days 365 -key ca-key.pem \
