@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 mkdir -p ~/.vm4docker/certs
 cd ~/.vm4docker/certs
