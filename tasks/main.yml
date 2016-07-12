@@ -6,13 +6,7 @@
   with_items:
   - docker
   - openssl
-
-- name: install docker-compose
-  shell: >
-    curl -L https://github.com/docker/compose/releases/download/1.3.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose &&
-    chmod +x /usr/local/bin/docker-compose
-  args:
-    creates: /usr/local/bin/docker-compose
+  - docker-compose
 
 - name: create .profile if it doesn't exists
   command: "touch {{ ansible_env.HOME }}/.profile"
@@ -34,11 +28,11 @@
     regexp="^host docker {" dest="/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf"
     line='host docker { hardware ethernet {{ docker_mac }}; fixed-address {{ docker_hostip }};}'
   notify: restart vmware services
-  sudo: yes
+  become: true
 
 - name: create /etc/exports if it doesn't exists
   command: "touch /etc/exports"
-  sudo: yes
+  become: true
   args:
     creates: "/etc/exports"
 
@@ -47,4 +41,4 @@
     regexp="^/Users" dest="/etc/exports"
     line='/Users -alldirs -mapall={{ ansible_user_uid }}:{{ ansible_user_gid }} {{ docker_hostip }}'
   notify: restart nfsd
-  sudo: yes
+  become: true
